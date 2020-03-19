@@ -1,0 +1,56 @@
+﻿@page "{handler?}/{i?}"
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+    <ol id="orderprocess">
+        <li>
+            <span class="currnt">1</span> Choose Item
+        </li>
+        <li>
+            <span class="step-car">2</span> Details
+        </li>
+        <li>
+            <span class="step-car">3</span> Receipt
+        </li>
+    </ol>
+
+    <div id="FeaturedProduct" class="row">
+        <div class="col-sm-8">
+            <img src="~/imge/@Model.FeaturedProduct.image" alt="Featured Product" class="img-fluid rounded InFeature" />
+        </div>
+        <div id="FeatredInfo" class="col-sm-4">
+            <div id="ProductInfo">
+                <h2>@Model.FeaturedProduct.name</h2>
+                <p id="Price">$@string.Format("{0:f}",Model.FeaturedProduct.price)</p>
+                <p id="description">@Model.FeaturedProduct.description</p>
+            </div>
+            <div id="calltoAction"> 
+            <a title="Order @Model.FeaturedProduct.name" class="btn btn-danger order-button text-white"asp-page="/order" asp-route-id="@Model.FeaturedProduct.id">Order NOW !</a>
+            </div>
+        </div>
+    </div>
+    <div id="ProductWrapper" class="row">
+        @foreach (var product in Model.Products)
+        {
+        <div class="col-sm-3">
+            <a asp-page="/order" asp-route-id="@product.id"
+               title="Order @product.name" class="">
+                <div class="productInfo">
+                    <h3>@product.name</h3>
+                    <img src="~/imge/@product.image" alt="Ima product" class="img-fluid rounded InGrid" />
+                    <p id="description">@product.description</p>
+                </div>
+            </a>
+            <div id="action">
+                <p class="float-left" id="Price">
+                    $@string.Format("{0:f}", product.price)
+                </p>
+                <a title="Order @product.name" class="btn btn-danger order-button float-right text-white"
+                   asp-page="/order" asp-route-id="@product.id">Order NOW !</a>
+            </div>
+        </div> 
+        }
+
+    </div>

@@ -1,0 +1,89 @@
+﻿@page "{id:int}"
+@model test_2.Pages.orderModel
+@{
+    ViewData["Title"] = "Ordering " + Model.SelectedProduct.name;
+}
+<ol id="orderprocess">
+    <li>
+        <span class="done">1</span> Choose Item
+    </li> 
+    <li>
+        <span class="currnt">2</span> Details
+    </li>
+    <li>
+        <span class="step-car">3</span> Receipt
+    </li>
+</ol>
+<h1>
+    Place UR order @Model.SelectedProduct.name
+</h1>
+<form method="post">
+    <div class="row">
+        <div class="col-3">
+            <img src="~/imge/@Model.SelectedProduct.image" alt="ORDER IMAGE" class="img-fluid img-thumbnail" />
+        </div>
+        <div class="col-9">
+            <ul class="orderPageList" data-role="listview">
+                <li>
+                    <div>
+                        <p>@Model.SelectedProduct.description</p>
+                    </div>
+                </li>
+                <li class="Orderemail">
+                    <div class="form-group">
+                        <label asp-for="OrderEmail"></label>
+                        <input asp-for="OrderEmail" class="form-control form-control-sm" />
+                        <span asp-validation-for="OrderEmail"></span>
+                    </div>
+                </li>
+                <li class="Ordershipping">
+                    <div class="form-group">
+                        <label asp-for="OrderShippng"></label>
+                        <textarea asp-for="OrderShippng" class="form-control form-control-sm" ></textarea>
+                        <span asp-validation-for="OrderShippng"></span>
+                    </div>
+                </li>
+                <li class="quantity">
+                    <div class="form-group col-3">
+                        <label asp-for="Quantity" class="col-1 col-form-label"></label>
+                        <input asp-for="Quantity" class="form-control form-control-sm" />
+                        X
+                        <span class="order-calc" id="Orderprice">@Model.SelectedProduct.price.ToString()</span>
+                        =
+                        <span class="order-calc" id="Ordertotal">@Model.SelectedProduct.price.ToString()</span>
+                        <span asp-validation-for="Quantity"></span>
+                    </div>
+                </li>
+            </ul>
+            <p class="action">
+                <!--input type="hidden" asp-for="SelectedProduct.id"/-->
+                <button class="btn btn-danger order-button" >Place order</button>
+            </p>
+        </div>
+    </div>
+
+</form>
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            //GET 3 values of price and total and order Quantity from HTML
+            var price = parseFloat($("#Orderprice").text()).toFixed(2),
+                total = $("#Ordertotal"), // Using # to access to variable
+                orderQty = $("#Quantity");
+            orderQty.on('change', function () {
+                //read current qunt
+
+                var quant = parseInt(orderQty.val());
+                if (!quant || quant < 1) {
+                    orderQty.val(1);
+                    quant = 1;
+                }
+                else if (quant.toString() !== orderQty.val()) {
+                    orderQty.val(quant);
+                }
+                total.text("$" + (price * quant).toFixed(2));
+            });
+        });
+    </script>
+
+}
